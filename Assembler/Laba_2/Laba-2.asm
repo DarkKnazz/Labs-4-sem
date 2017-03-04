@@ -1,6 +1,6 @@
 .MODEL small
 .STACK 100h
-
+;¬ариант 11. «аменить подстроку строкой в строке
 .CODE
 BEGIN:
 mov ax, @data
@@ -8,6 +8,7 @@ mov ds, ax
 mov es, ax       
 xor ax, ax
 
+;¬вод строк и вывод сообщений
 lea dx, MSG1
 call OUTPUT_STRING
 
@@ -27,23 +28,28 @@ lea dx, str3_
 call INPUT_STRING
 
 xor cx, cx
-mov cl, str1l       ; put to cx count of chars in main string
-sub cl, str2l       ; substract from cx count of chars in substring
-inc cl              ; increase counter
-cld                 ; clear direction flag
-lea di, str2        ; put to di address of substring
-lea si, str1        ; to to si address of main string
+mov cl, str1l       ; помещает в cx количество символов в исходной строке
+sub cl, str2l
+inc cl              
+cld                 
+lea di, str2        ; помещает в di адрес строки дл€ поиска
+lea si, str1        ; помещает в si адрес исходной строки
 xor ax, ax
 
-CHECK_STRING:       ; repeated for length of str1 - length of str2 
+CHECK_STRING:       ; повтор€ть уменьшенную длину кол во раз
+mov def, 0          ; обнулить счетчик разности
 call SEARCH_SUBSTRING
 inc si
+add si, def         ;сдвинуть счетчик на количество вставленных символов
+mov dx, def
+add ins, dx         ;переместить индекс вхождени€
+add str1_[1], dl    ;увеличить длину строки
 inc ins
 loop CHECK_STRING
 
 lea dx, MSG3
 call OUTPUT_STRING
-lea dx, str1
+lea dx, str1        ; вывести исходную строку
 call OUTPUT_STRING 
 
 END:
@@ -52,121 +58,125 @@ int 21h
 
 ; **** Procedures ****
 
-; Procedure for input string
-; address of buffer, where string will be stored, must be saved in dx
+; процедура ввода строки
 INPUT_STRING proc
-push ax
-mov ah, 0ah
-int 21h
-pop ax
-ret
+    push ax
+    mov ah, 0ah
+    int 21h
+    pop ax
+    ret
 INPUT_STRING endp
 
-; Procedure for output string
-; address of buffer, which will be used for output, must be saved in dx
+;процедура вывода строки
 OUTPUT_STRING proc
-push ax
-mov ah, 09h
-int 21h
-pop ax 
-ret
+    push ax
+    mov ah, 09h
+    int 21h
+    pop ax 
+    ret
 OUTPUT_STRING endp
 
-; Procedure for searching entry point of substring, which address is stored in di,
-; in main string, which address is stored in si.
-; if entry point of substring is found then will be called DELETE procedure for
-; found char
+; процедура нахождени€ подстроки
+; процедура проходит по строке,
+; находит нужное, удал€ет его
+; и замен€ет на слово дл€ замены
 SEARCH_SUBSTRING proc
-push cx
-push di
-push si
-mov bx, si
-mov cl, str2l
-repe cmpsb              ; comparing bytes from addresses di and si
-je _EQ
-jne _NEQ
-_EQ:
-                        ; di points str2, si points end of substring 
-call DELETE
-call CHANGE
-inc al
-_NEQ:
-pop si
-pop di
-pop cx
-ret
+    push cx
+    push di
+    push si
+    mov bx, si
+    mov cl, str2l
+    repe cmpsb              
+    je _EQ
+    jne _NEQ
+    _EQ:
+                            
+    call DELETE
+    call CHANGE
+    inc al
+    _NEQ:
+    pop si
+    pop di
+    pop cx
+    ret
 SEARCH_SUBSTRING endp
 
+; удаление подстроки из исходной строки
+; путем перемещени€ байт из si в di
 DELETE proc
-push bx
-push di
-push si
-mov di, bx 
-xor cx, cx
-mov cl, str1l
-repe movsb              ; send byte from di to si
-pop si
-pop di
-pop bx
-ret
+    push bx
+    push di
+    push si
+    mov di, bx 
+    xor cx, cx
+    mov cl, str1l
+    repe movsb              
+    pop si
+    pop di
+    pop bx
+    ret
 DELETE endp
 
+;процедура вставки слова в строку
 CHANGE proc
     pusha
-    push ins
-    ;Find the length of insert word
+    push ins                            ;сохранение в стеке индекса вхождени€
     lea si, str1_
     lea di, str3_
     ;len1
-    mov ch, str1_[1]
+    mov ch, str1_[1]                    ;определение длины строк
     mov cl, str3_[1]
     xor bx, bx
     xor di, di
     xor bx, bx
     Outer_Cycl:
-        mov dl, str3[di]
+        mov dl, str3[di]                ;помещаем в стек очередное значение из подстроки
         push dx
         mov bl, ch
         mov si, bx
-        cycl:
+        cycl:                           ;в цикле сдвигаем строку вправо до индекса вхождени€
             mov dl, str1[si-1]
             mov str1[si], dl
             dec si
             cmp ins, si
             jne cycl
         pop dx
-        mov str1[si], dl
+        mov str1[si], dl                ;вставл€ем символ
         
         inc si
         inc di
         inc ch
         inc ins
+        inc def
         xor dx, dx
         mov dl, cl
         cmp di, dx 
-        jne Outer_Cycl
-    pop ins    
+        jne Outer_Cycl                  ;пока непройдем слово полностью
+    pop ins
+    dec def    
     popa
-ret
+    ret
 CHANGE endp
 
 .DATA
-MSG1 DB "Enter string: $"
-MSG2 DB 0Ah, 0Dh, "Enter substring to delete: $"
-MSG3 DB 0Ah, 0Dh, "String after removing substring: $"
+MSG1 DB "¬ведите строку: $"
+MSG2 DB 0Ah, 0Dh, "¬ведите строку дл€ поиска: $"
+MSG3 DB 0Ah, 0Dh, "¬ведите строку дл€ замены: $"
+MSG4 DB 0Ah, 0Dh, "—трока после замены: $"
 LENGTH equ 200
 str1_ DB LENGTH
-str1l DB '$'
+str1l DB '$'                  ;исходна€ строка
 str1 DB LENGTH dup('$')
 
 str2_ DB LENGTH
-str2l DB '$'
+str2l DB '$'                  ;строка дл€ поиска
 str2 DB LENGTH dup('$')
 
 str3_ DB LENGTH
-str3l DB '$'
+str3l DB '$'                  ;строка дл€ замены
 str3 DB LENGTH dup('$')
 
 ins dw 0
+def dw 0
 
 end BEGIN

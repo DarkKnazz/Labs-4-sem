@@ -11,7 +11,7 @@ int main(){
 	unsigned int finish;
 	unsigned int result;
 	double x = 0;
-	double a = 0, b = 0, d = 0;
+	int a = 0, b = 0, d = 0;
 	int cont = 0;
 	double res = 0, res1 = 0;
 	while (1){

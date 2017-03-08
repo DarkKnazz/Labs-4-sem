@@ -1,0 +1,14 @@
+﻿Сборка начата 06.03.2017 14:12:03.
+     1>Проект "C:\Users\Knazz\Documents\Visual Studio 2013\Projects\Laba_1_child\Laba_1_child\Laba_1_child.vcxproj" в узле 2 (целевые объекты Rebuild).
+     1>ClCompile:
+         E:\Games\VisualStudio\VC\bin\CL.exe /c /ZI /nologo /W3 /WX- /sdl /Od /Oy- /D _MBCS /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc120.pdb" /Gd /TP /analyze- /errorReport:prompt "Исходный код.cpp"
+         Исходный код.cpp
+     1>c:\users\knazz\documents\visual studio 2013\projects\laba_1_child\laba_1_child\исходный код.cpp(35): warning C4101: sBuf: неиспользованная локальная переменная
+       Link:
+         E:\Games\VisualStudio\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"C:\Users\Knazz\Documents\Visual Studio 2013\Projects\Laba_1_child\Debug\Laba_1_child.exe" /INCREMENTAL /NOLOGO kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"C:\Users\Knazz\Documents\Visual Studio 2013\Projects\Laba_1_child\Debug\Laba_1_child.pdb" /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"C:\Users\Knazz\Documents\Visual Studio 2013\Projects\Laba_1_child\Debug\Laba_1_child.lib" /MACHINE:X86 "Debug\Исходный код.obj"
+         Laba_1_child.vcxproj -> C:\Users\Knazz\Documents\Visual Studio 2013\Projects\Laba_1_child\Debug\Laba_1_child.exe
+     1>Сборка проекта "C:\Users\Knazz\Documents\Visual Studio 2013\Projects\Laba_1_child\Laba_1_child\Laba_1_child.vcxproj" завершена (целевые объекты Rebuild).
+
+Сборка успешно завершена.
+
+Затраченное время: 00:00:03.27

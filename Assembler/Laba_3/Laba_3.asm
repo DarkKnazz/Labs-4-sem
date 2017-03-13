@@ -14,14 +14,15 @@
     msg5 db "Диапазон это одно число!", 10, 13, '$'
     errNum db "Вы не ввели число",10,13,'$'
     errOver db "Произошло переполнение числа!",10,13,'$'
-    endl db 10,13,'$'
+    endl db 10,13,'$'   
+    kol_Str db 8 dup(?)
     
-    mas dw 1, 3, -4, 7, 10, -5, 2, 8, 0, 1, 15, -7, 9, 0, 4, 6, -2, -9, 3, 13, 1, 0, 5, -9, 10, -3, 6, 2, 32, 45
+    mas dw 0,0,0,0,0,0,0,0,0,0
     num1 dw 0
-    num2 dw 0
+    num2 dw 0 
     
     kol dw 0
-    
+    tmp dw 0
     sign dw 0
 .code
 
@@ -63,13 +64,40 @@ start:
     lea bx, num2
     lea di, str2
     call ATOI
-    xor ax, ax
-    xor si, si
     mov dx, num2
-    xor bx, num1
-    cmp dx, bx
-    je EqualNum
-    jl BorderLow 
+    cmp num1, dx
+    jg exit
+    xor si, si
+array_Enter:
+    INPUT [str2]
+    OUTPUT [endl]
+    lea bx, tmp    
+    lea di, str2
+    call ATOI
+    mov dx, tmp
+    mov mas[si], dx
+    add si, 2
+    cmp si, 20
+jne array_Enter
+             
+xor si, si
+xor dx, dx             
+array_Kol:
+    mov dx, num1
+    cmp mas[si], dx
+    jge cont1
+    incr:
+    add si, 2
+    cmp si, 20
+jne array_Kol
+
+    lea bx, kol
+    lea di, kol_Str
+    call ITOA
+    OUTPUT [msg4]
+    OUTPUT [kol_Str]
+    OUTPUT [endl]
+
 exit:      
     mov ah, 4ch
     int 21h
@@ -138,7 +166,40 @@ ErrorOver:
     mov sign, 0
     OUTPUT [errOver]
     jmp exit    
-ATOI endp
+ATOI endp   
+
+ITOA PROC
+
+    mov ax, [bx]
+    mov bx, 10
+    xor cx, cx 
+    
+    cmp ax, MAX
+    jbe division
+    dec ax
+    not ax
+    mov [di], '-'
+    inc di
+    
+division:
+    xor dx, dx
+    div bx       
+    push dx
+    inc cx
+    cmp ax, 0
+    jne division
+
+save_in_str:
+    pop dx
+    add dl, 30h
+    mov [di], dl
+    inc di
+    loop save_in_str
+    
+    mov [di], '$'    
+    
+    ret
+ITOA endp
 
 EqualNum:
     OUTPUT [msg5]
@@ -147,5 +208,15 @@ EqualNum:
 BorderLow:
     OUTPUT [msg3]
     jmp exit
+
+cont1:
+    mov dx, num2
+    cmp mas[si], dx
+    jle cont2:
+    jg incr
+
+cont2:
+    inc kol
+    jmp incr    
 
 end start         

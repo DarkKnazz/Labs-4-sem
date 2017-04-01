@@ -13,4 +13,12 @@ abstract public class Bird extends Animal{
     public String fly(){
         return "It can fly!\n";
     }
+
+    /**
+     * Метод, означающий процесс еды Птицы
+     * @return Строка сообщение о том, что Птица поела
+     */
+    public String eat(){
+        return "Mammal is eating!";
+    }
 }

@@ -6,4 +6,11 @@ package com.Abstract;
  */
 abstract public class Mammal extends Animal{
     protected int foot = 4;
+    /**
+     * Метод, означающий процесс еды Млекопитающего
+     * @return Строка сообщение о том, что Млекопитающее поело
+     */
+    public String eat(){
+        return "Mammal is eating!";
+    }
 }

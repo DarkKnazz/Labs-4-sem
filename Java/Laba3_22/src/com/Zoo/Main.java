@@ -29,7 +29,7 @@ public class Main {
         animals.add(new Straus());
 
         Display display = new Display();
-        Shell shell = new Shell(display);
+        Shell shell = new Shell(display, SWT.CLOSE | SWT.TITLE);
         shell.setText("Zoo");
         shell.setLayout(new GridLayout(2, false));
 

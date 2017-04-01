@@ -42,6 +42,7 @@ public class Zoo {
 
     /**
      * Метод обслужить Зрителя выведет в консоль строку о проведении данной операции
+     * @param watcher Обьект зрителя для зоопарка
      * @return str Строка с сообщением о просмотре зрителем животных
      */
     public String serveWatcher(Watcher watcher){

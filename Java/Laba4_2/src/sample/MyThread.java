@@ -1,20 +1,20 @@
 package sample;
 
-/**
- * Created by Knazz on 01.04.2017.
- */
 public class MyThread extends Thread {
-    public int parametr;
-    public MyThread(int parametr) {
-        this.parametr = parametr;
+    double tempScore;
+    int h;
+    double firstOsn;
+    double secondOsn;
+    public MyThread(int a, int b, double c, double d){
+        h = b - a;
+        firstOsn = c;
+        secondOsn = d;
     }
     public void run() {
-        System.out.println("parametr is " + parametr);
-        //отправка запроса
-        //........
+        tempScore = (firstOsn + secondOsn)/2 * h;
     }
 
-    int getData(){
-        return parametr;
+    double getData(){
+        return tempScore;
     }
 }

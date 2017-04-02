@@ -3,6 +3,7 @@ package sample;
 import javafx.application.Application;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
 import javafx.scene.Parent;
@@ -11,12 +12,15 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
 public class Main extends Application {
+
+    private Function func;
 
     int score = 0;
     @Override
@@ -67,25 +71,34 @@ public class Main extends Application {
 
         root.getStylesheets().add((getClass().getResource("style.css")).toExternalForm());
         root.setPadding(new Insets(10, 0, 20, 0));
-        /*MyThread thread = new MyThread(5);
-        thread.start();
-        try {
-            thread.join();
-            score += thread.getData();
-            // действия после завершения работы потока
-        } catch (InterruptedException x) {}
-        thread = new MyThread(10);
-        thread.start();
-        try {
-            thread.join();
-            score += thread.getData();
-            // действия после завершения работы потока
-        } catch (InterruptedException x) {}*/
         root.getChildren().addAll(header, diap, answer, choose, butt);
         primaryStage.setTitle("Integral counter");
         System.out.println(score);
         primaryStage.setScene(new Scene(root, 360, 300));
         primaryStage.show();
+
+        button.addEventHandler(MouseEvent.MOUSE_CLICKED, new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent mouseEvent) {
+                button.setDisable(true);
+                int i;
+                String A, B, f;
+                A = textA.getText();
+                B = textB.getText();
+                f = comboBox.getValue().toString();
+                System.out.println(f);
+                if((A.length() != 0) && (B.length() != 0) && (f != "")){
+                    int a = Integer.parseInt(A);
+                    int b = Integer.parseInt(B);
+                    int c = (int)f.charAt(0) - 48;
+                    func = new Function(a, b, c);
+                    func.countIntegral();
+                    double score = func.getScore();
+                    textAns.setText(String.valueOf(score));
+                    button.setDisable(false);
+                }
+            }
+        });;
     }
 
 

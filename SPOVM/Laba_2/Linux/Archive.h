@@ -4,17 +4,6 @@
 #include <iostream>
 #include <string.h>
 #include <fstream>
-#ifdef _WIN32 || _WIN64
-	#include <string>
-	#include <cstdio>
-	#include <cstdlib>
-	#include <conio.h>
-	#include <iomanip>
-	#include <sstream>
-	#include <limits>
-	#include <windows.h>
-	#include <tchar.h>
-#endif // _WIN32 || _WIN64
 #ifdef linux
 	#include <unistd.h>
 	#include <cstdlib>
@@ -28,36 +17,8 @@
 
 
 using namespace std;
-#ifdef _WIN32 || _WIN64
-class Server
-{
-	HANDLE* hPipes;
-	HANDLE hSemaphore;
-	char lpszInMessage[50];
-	DWORD dwBytesRead;
-	char  lpszOutMessage[50];
-	DWORD dwBytesWrite;
-	int N;
-public:
-	Server(int amount);
-	~Server();
-	bool checkURI(char* buf);
-	bool createProc();
-	bool createPipe(HANDLE& hPipe);
-	bool connectPipe(HANDLE& hPipe);
-	bool readFromPipe(HANDLE& hPipe);
-	bool writeToPipe(HANDLE& hPipe);
-	bool checkRequest();
-	void addRequestToFile();
-	void downloading();
-	void closeHandle(HANDLE& hPipe);
-	HANDLE& getPipe(int index);
-	bool checking();
-	HANDLE& getSemaphore();
-};
-#endif
 #ifdef linux
-class Server {
+class Archive {
 private:
 	pid_t pid;
 	int PipeDescript;
@@ -65,8 +26,8 @@ private:
 	char OutMessage[50];
 	sem_t *sem;
 public:
-	Server();
-	~Server();
+	Archive();
+	~Archive();
 	bool createProc();
 	bool createPipe();
 	void readFromPipe();
@@ -77,9 +38,8 @@ public:
 	void addRequestToFile();
 	void downloading();
 	void closeHandle();
-
 };
-#endif // linux
+#endif
 
 
 

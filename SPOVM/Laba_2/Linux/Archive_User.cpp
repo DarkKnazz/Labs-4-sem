@@ -1,5 +1,12 @@
 #include "Archive_User.h"
 #ifdef linux
+	ArchiveUser::ArchiveUser(){
+
+	}
+
+	ArchiveUser::~ArchiveUser(){
+
+	}
 	void ArchiveUser::connection() {
 		pipeName = open("/tmp/MyPipe", O_RDWR);
 		if (pipeName < 0)

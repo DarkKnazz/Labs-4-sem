@@ -13,6 +13,7 @@
 	#include <signal.h>
 	#include <semaphore.h> 
 	#include <errno.h>
+	#include <sstream>
 #endif
 
 
@@ -21,22 +22,25 @@ using namespace std;
 class Archive {
 private:
 	pid_t pid;
-	int PipeDescript;
-	char InMessage[50];
-	char OutMessage[50];
+	int pipeName;
+	char response[256];
+	char callback[256];
+	char err1[256] = "Invalid password!\n\n";
+	char err2[256] = "Out of file!\n\n";
+	string mas[3];
+	string password;
+	int lineFile;
+	int line;
+	int len;
 	sem_t *sem;
 public:
 	Archive();
 	~Archive();
 	bool createProc();
 	bool createPipe();
-	void readFromPipe();
-	void writeToPipe();
-	bool checkURI(char *buf);
-	bool checking();
-	bool checkRequest();
-	void addRequestToFile();
-	void downloading();
+	void getResponse();
+	void sendCallback();
+	void validate();
 	void closeHandle();
 };
 #endif

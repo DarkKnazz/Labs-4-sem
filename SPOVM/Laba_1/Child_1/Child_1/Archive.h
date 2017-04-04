@@ -78,7 +78,7 @@ public:
 		pid_t cpid;
 		string password;
 		char buf;
-		char s[100] = "Hello world!!!!";
+		char s[50] = "Hello world!!!!";
 		char err1[50] = "Invalid password!";
 		char err2[50] = "Out of file!";
 		string s1;

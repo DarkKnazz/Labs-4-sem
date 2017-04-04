@@ -16,27 +16,41 @@
 		}
 	}
 	void ArchiveUser::getCallback() {
-		read(pipeName, InMessage, 50);
+		read(pipeName, inputMessage, 256);
 	}
 	void ArchiveUser::sendResponse() {
-		write(pipeName, OutMessage, url.size() + 1);
+		write(pipeName, outputMessage, password.length());
 	}
 	void ArchiveUser::waitForAnswer() {
 		cout << "Wait" << endl;
 		sem_wait(sem);
 		system("clear");
-		cout << "Put your URL-address" << endl;
-		cin >> url;
-
-		int i = url.size();
-		strcpy(OutMessage, url.c_str());
-		OutMessage[i + 1] = '\n';
+		cout << "Enter password: " << endl;
+		getline(cin, password);
+		cout << "Enter line: " << endl;
+		cin >> line;
+		stringstream ch;
+		ch << line;
+		stringstream ch1;
+		ch1 << password.length();
+		password = ch1.str() + "\n" + password + "\n" + ch.str() + "\n";
+		cout << password;
+		strcpy(outputMessage, password.c_str());
 	}
 	void ArchiveUser::outputResult() {
-		cout << "Result: " << InMessage << endl;
-		sleep(5);
-		sem_post(sem);
+		cout << "Result: ";
+		int tabs = 0;
+		for(int i = 0; i < strlen(inputMessage); i++){
+			if(inputMessage[i] == '\n')
+				tabs++;
+			if(tabs == 2)
+				break;
+			cout << inputMessage[i];
+		}
+		cout << endl;
 		close(pipeName);
+		sleep(3);
+		sem_post(sem);
 	}
 	void ArchiveUser::initSem() {
 		sem = sem_open("/semaphore", 0, 0777, 1);

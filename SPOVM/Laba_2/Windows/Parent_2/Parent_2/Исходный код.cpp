@@ -9,24 +9,30 @@
 #include<iostream>
 #include<fstream>
 using namespace std;
-int main(){
-	int kol = 0;
-	SetConsoleCP(1251);
-	SetConsoleOutputCP(1251);
+
+class Archive{
+private:
+	HANDLE sem;
 	DWORD wait = -1;
-	HANDLE sem = CreateSemaphore(NULL, 1, 1, L"Sem1");
-	HANDLE Event = CreateEvent(NULL, FALSE, FALSE, L"MyEvent");
-	HANDLE Event1 = CreateEvent(NULL, FALSE, FALSE, L"MyEvent1");
+	HANDLE Event;
+	HANDLE Event1;
+	HANDLE pipe;
 	STARTUPINFO startupInfo;
 	PROCESS_INFORMATION processInform;
-	cout << "Лабораторная работа №2" << endl;
-	cout << "Взаимодействие с архивом нескольких клиентов" << endl;
-	_getch();
-	system("Cls");
-	int n;
-	cout << "Введите количество клиентов: " << endl;
-	cin >> n;
-	for (int i = 0; i < n; i++){
+	unsigned int line;
+	string password;
+	DWORD  cbRead;
+	char   szBuf[256];
+	string mas[3];
+public:
+	Archive(){
+		sem = CreateSemaphore(NULL, 1, 1, L"Sem1");
+		Event = CreateEvent(NULL, FALSE, FALSE, L"MyEvent");
+		Event1 = CreateEvent(NULL, FALSE, FALSE, L"MyEvent1");
+	}
+	~Archive(){
+	}
+	void createProc(){
 		GetStartupInfo(&startupInfo);
 		CreateProcess(
 			L"..\\..\\Child_2\\Debug\\Child_2.exe",
@@ -41,10 +47,11 @@ int main(){
 			&processInform
 			);
 	}
-	int j;
-	for (int k = 0; k < n; k++){
-		ResetEvent(Event1);
-		HANDLE pipe = CreateNamedPipe(
+	void getResponse(){
+		ReadFile(pipe, szBuf, 512, &cbRead, NULL);
+	}
+	void createPipe(){
+		pipe = CreateNamedPipe(
 			L"\\\\.\\pipe\\$MyPipe$",
 			PIPE_ACCESS_DUPLEX,
 			PIPE_TYPE_MESSAGE | // ??
@@ -56,17 +63,17 @@ int main(){
 			5000, // ??
 			nullptr // ??
 			);
+	}
+	void validate(){
+		ResetEvent(Event1);
+		createPipe();
+		int kol = 0;
 		while (wait != WAIT_OBJECT_0){
 			wait = WaitForSingleObject(Event, INFINITE);
 		}
 		BOOL fConnected = ConnectNamedPipe(pipe, NULL);
+		getResponse();
 		//Разбор строки из дочернего процесса
-		unsigned int line;
-		string password;
-		DWORD  cbRead;
-		char   szBuf[256];
-		string mas[3];
-		ReadFile(pipe, szBuf, 512, &cbRead, NULL);
 		fstream fil("E:/file.txt");
 		string st;
 		while (fil) {
@@ -75,7 +82,7 @@ int main(){
 		}
 		fil.close();
 		cout << "Количество строк в файле: " << kol << endl;
-		j = 0;
+		int j = 0;
 		char *buf = strtok(szBuf, " \n");
 		//Разделение полученного буфера на строки
 		while (j != 3){
@@ -131,6 +138,27 @@ int main(){
 		wait = -1;
 		SetEvent(Event1);
 		ResetEvent(Event);
+	}
+};
+
+int main(){
+	int kol = 0;
+	SetConsoleCP(1251);
+	SetConsoleOutputCP(1251);
+	Archive archive;
+	cout << "Лабораторная работа №2" << endl;
+	cout << "Взаимодействие с архивом нескольких клиентов" << endl;
+	_getch();
+	system("cls");
+	int n;
+	cout << "Введите количество клиентов: " << endl;
+	cin >> n;
+	for (int i = 0; i < n; i++){
+		archive.createProc();
+	}
+	for (int i = 0; i < n; i++){
+		system("cls");
+		archive.validate();
 	}
 	_getch();
 	return 0;

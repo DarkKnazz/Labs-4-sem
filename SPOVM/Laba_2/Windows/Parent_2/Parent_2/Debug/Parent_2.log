@@ -1,14 +1,14 @@
-﻿Сборка начата 19.03.2017 14:43:48.
-     1>Проект "C:\Users\Knazz\documents\visual studio 2013\Projects\Parent_2\Parent_2\Parent_2.vcxproj" в узле 2 (целевые объекты Rebuild).
+﻿Сборка начата 04.04.2017 23:34:44.
+     1>Проект "E:\Программирование\2 Курс\Laba Tasks\SPOVM\Laba_2\Windows\Parent_2\Parent_2\Parent_2.vcxproj" в узле 2 (целевые объекты Rebuild).
      1>ClCompile:
          E:\Games\VisualStudio\VC\bin\CL.exe /c /ZI /nologo /W3 /WX- /sdl /Od /Oy- /D WIN32 /D _DEBUG /D _CONSOLE /D _LIB /D _UNICODE /D UNICODE /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc120.pdb" /Gd /TP /analyze- /errorReport:prompt "Исходный код.cpp"
          Исходный код.cpp
-     1>c:\users\knazz\documents\visual studio 2013\projects\parent_2\parent_2\исходный код.cpp(95): warning C4018: <: несоответствие типов со знаком и без знака
+     1>e:\программирование\2 курс\laba tasks\spovm\laba_2\windows\parent_2\parent_2\исходный код.cpp(102): warning C4018: <: несоответствие типов со знаком и без знака
        Link:
-         E:\Games\VisualStudio\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"C:\Users\Knazz\documents\visual studio 2013\Projects\Parent_2\Debug\Parent_2.exe" /INCREMENTAL /NOLOGO kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"C:\Users\Knazz\documents\visual studio 2013\Projects\Parent_2\Debug\Parent_2.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"C:\Users\Knazz\documents\visual studio 2013\Projects\Parent_2\Debug\Parent_2.lib" /MACHINE:X86 "Debug\Исходный код.obj"
-         Parent_2.vcxproj -> C:\Users\Knazz\documents\visual studio 2013\Projects\Parent_2\Debug\Parent_2.exe
-     1>Сборка проекта "C:\Users\Knazz\documents\visual studio 2013\Projects\Parent_2\Parent_2\Parent_2.vcxproj" завершена (целевые объекты Rebuild).
+         E:\Games\VisualStudio\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"E:\Программирование\2 Курс\Laba Tasks\SPOVM\Laba_2\Windows\Parent_2\Debug\Parent_2.exe" /INCREMENTAL /NOLOGO kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"E:\Программирование\2 Курс\Laba Tasks\SPOVM\Laba_2\Windows\Parent_2\Debug\Parent_2.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"E:\Программирование\2 Курс\Laba Tasks\SPOVM\Laba_2\Windows\Parent_2\Debug\Parent_2.lib" /MACHINE:X86 "Debug\Исходный код.obj"
+         Parent_2.vcxproj -> E:\Программирование\2 Курс\Laba Tasks\SPOVM\Laba_2\Windows\Parent_2\Debug\Parent_2.exe
+     1>Сборка проекта "E:\Программирование\2 Курс\Laba Tasks\SPOVM\Laba_2\Windows\Parent_2\Parent_2\Parent_2.vcxproj" завершена (целевые объекты Rebuild).
 
 Сборка успешно завершена.
 
-Затраченное время: 00:00:01.27
+Затраченное время: 00:00:01.53

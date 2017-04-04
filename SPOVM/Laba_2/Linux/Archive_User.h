@@ -18,9 +18,10 @@ using namespace std;
 #ifdef linux
 	class ArchiveUser {
 		int pipeName;
-		string url;
-		char InMessage[50];
-		char OutMessage[50];
+		string password;
+		int line;
+		char inputMessage[256];
+		char outputMessage[256];
 		sem_t* sem;
 	public:
 		ArchiveUser();

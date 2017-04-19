@@ -10,7 +10,7 @@
     
     ARRAY_SYMBOLS db 8 dup(?) 
     
-    PATH db 'input.txt', 0;126 dup(0) 
+    PATH db 126 dup(0);'input.txt', 0 
     
     PATH_OUT db 'output.txt', 0 
     
@@ -22,7 +22,7 @@
                  
     TEMP_STR db ? 
     
-    buff db ?    
+    buff db ?   
 .CODE  
 
 OUTPUT MACRO outLine                  ; макрос вывода строки на экран
@@ -55,8 +55,8 @@ start:
     mov dl, ARRAY_SYMBOLS[1]
     xor dx, dx
     xor si, si                
-    ;lea di, PATH         
-    ;call PARSE_PATH                 
+    lea di, PATH         
+    call PARSE_PATH                 
        
     lea dx, PATH                        ; путь до открываемого файла
     mov ah, 3Dh                        ; функция отрытия файла 
@@ -70,7 +70,7 @@ start:
     xor di, di
 read:     
     mov ah, 3Fh                        ; чтение из файла
-    mov cx, 1                          ; 1024 байт
+    mov cx, 1                          ; 1 байт
     lea dx, BUFFER                     ; в массив buffer
     int 21h 
     cmp ax, cx                         ; если не совпадает то мы вычитали все из файла
@@ -194,7 +194,7 @@ ex:
     pop ax
     mov ah,3Eh              ;Функция DOS 3Eh (закрытие файла)
     mov bx,ax         ;Дескриптор
-    int 21h      
+    int 21h    
     popa
     ret
 endp      

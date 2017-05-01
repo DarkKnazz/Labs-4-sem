@@ -18,6 +18,10 @@ import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
+/**
+ * The main class
+ */
+
 public class Main extends Application {
 
     private Function func;
@@ -89,16 +93,18 @@ public class Main extends Application {
                 System.out.println(f);
                 if((A.length() != 0) && (B.length() != 0) && (f != "")){
                     int a = Integer.parseInt(A);
+                    System.out.println(a);
                     int b = Integer.parseInt(B);
                     int c = (int)f.charAt(0) - 48;
-                    func = new Function(a, b, c);
+                    MyThread thr = new MyThread();
+                    func = new Function(a, b, c, thr);
                     func.countIntegral();
                     double score = func.getScore();
                     textAns.setText(String.valueOf(score));
                     button.setDisable(false);
                 }
             }
-        });;
+        });
     }
 
 

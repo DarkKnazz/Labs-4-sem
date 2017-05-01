@@ -1,7 +1,7 @@
 #include "Archive.h"
 #ifdef linux
 Archive::Archive() {
-	sem = sem_open("/semaphore", O_CREAT, 0777, 1);
+	sem = sem_open("/semaphore", O_CREAT, 0777, 0);
 	sem_post(sem);
 	fstream fil("file.txt");
 	string st;

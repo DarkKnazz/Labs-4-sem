@@ -16,13 +16,12 @@ int main(){
 	unsigned int start;
 	unsigned int finish;
 	unsigned int result;
-	_asm finit
 	for (int k = 0; k < 1000000; k++){
 		srand(time(NULL));
 		for (i = 0; i < 8; i++){
 			for (j = 0; j < 8; j++){
-				mt1[i][j] = rand() % 100 + 1;
-				mt2[i][j] = rand() % 100 + 1;
+				mt1[i][j] = rand() % 100;
+				mt2[i][j] = rand() % 100;
 			}
 		}
 		start = clock();
@@ -43,8 +42,6 @@ int main(){
 		_asm{
 			pusha
 				xor esi, esi
-				xor ecx, ecx
-				xor edi, edi
 			loop1 :
 			xor cx, cx
 				mov ax, mt1[esi]
@@ -60,7 +57,7 @@ int main(){
 		finish = clock();
 		result = finish - start;
 		cl2 += result;
-		cnt = 64;
+		cnt = 16;
 
 		//MMX solution
 		start = clock();
@@ -71,19 +68,18 @@ int main(){
 			pxor MM7, MM7
 				movq MM0, mt1[esi]
 				movq MM1, mt2[esi]
-				paddd MM0, MM1
-				paddd MM7, MM0
-				movd    mtMMX[esi], MM7
-				add esi, 2
+				paddw MM0, MM1
+				movq  mtMMX[esi], MM0
+				add esi, 8
 				sub cnt, 1
 				jnz loop2
+				emms
 				popa
 		}
 		finish = clock();
 		result = finish - start;
 		cl3 += result;
 	}
-	_asm fwait
 	cout << "C solution answer: " << endl;
 	cout << "Time: "<< cl1 << endl;
 	for (i = 0; i < 8; i++){

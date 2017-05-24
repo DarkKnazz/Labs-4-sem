@@ -14,7 +14,9 @@
     
     PATH_OUT db 'output.txt', 0 
     
-    LEN_STR dw 0     
+    LEN_STR dw 0
+    
+    HANDLE dw 0     
     
     IO_ERROR db "Unable to open the file.$"                   
                                                     
@@ -56,19 +58,27 @@ start:
     xor dx, dx
     xor si, si                
     lea di, PATH         
-    call PARSE_PATH                 
-       
-    lea dx, PATH                        ; путь до открываемого файла
+    call PARSE_PATH                   
+    lea dx, PATH                       ; путь до открываемого файла
     mov ah, 3Dh                        ; функция отрытия файла 
     mov al, 00h                        ; только чтение
-    int 21h   
+    int 21h 
     
-    jc file_Undefined                      ; если не отрыли выводим ошибку 
+    jc file_Undefined                      ; если не отрыли выводим ошибку
+     
+    pusha
+    mov ah, 3Dh                        ; функция отрытия файла
+    lea dx, PATH_OUT
+    mov al, 02h 
+    int 21h 
+    mov [HANDLE], ax
+    popa   
     
     mov bx,ax 
     lea di,TEMP_STR
     xor di, di
-read:     
+read:
+    xor ax, ax     
     mov ah, 3Fh                        ; чтение из файла
     mov cx, 1                          ; 1 байт
     lea dx, BUFFER                     ; в массив buffer
@@ -84,14 +94,11 @@ read:
     cmp BUFFER[0], 0Ah
     je calc_Str
     
-    mov al, BUFFER[0]
-    mov TEMP_STR[di], al
-    inc di   
-    inc LEN_STR
-    
     mov dl, BUFFER[0]
-    mov ah,2
-    int 21h   
+    mov TEMP_STR[di], dl
+    inc di   
+    inc LEN_STR 
+    mov dl, 00h   
      
 jmp read     
     mov ah,3Eh                         ; функция закрытия файла
@@ -112,12 +119,14 @@ exit:
     int 21h 
 
 calc_Str:
+    cmp LEN_STR, 0
+    je exit
     call CHECK_STRING
     xor di, di 
     mov LEN_STR, 0
-    jmp read
+    jmp read        
     
-PARSE_PATH PROC                     ; процедура парсинга командной строки
+PARSE_PATH PROC                        ; процедура парсинга командной строки
     xor cx,cx          
     mov si, 80h
     mov cl, es:[si]                    ; кол-во символов в командной строке
@@ -126,12 +135,14 @@ PARSE_PATH PROC                     ; процедура парсинга командной строки
     je command_Undefined
     
     inc si
-cycle:       
     mov al, es:[si] 
     cmp al, ' '
-    je next_step 
-    cmp al, 13
     je next_step
+cycle:
+    mov al, es:[si]        
+    cmp al, 13
+    je next_step 
+    cmp al, ' '    
     mov [di], al   
     inc di
 next_step:
@@ -191,18 +202,14 @@ write_or_not:
     inc si
     cmp si, LEN_STR
 ex: 
-    pop ax
-    mov ah,3Eh              ;Функция DOS 3Eh (закрытие файла)
-    mov bx,ax         ;Дескриптор
-    int 21h    
+    pop ax   
     popa
     ret
 endp      
 
 WRITE_TO_FILE PROC
-    mov ah, 3Ch                        ; функция отрытия файла
-    lea dx, PATH_OUT 
-    int 21h    
+    pusha
+    mov ax, [HANDLE]    
     mov bx, ax 
     
     mov ah, 42h
@@ -230,7 +237,12 @@ WRITE_TO_FILE PROC
     mov ah, 40h  
     mov dx, offset buff
     mov cx, 1      
-    int 21h  
+    int 21h
+    
+    mov ah,3Eh              ;Функция DOS 3Eh (закрытие файла)
+    mov bx,ax         ;Дескриптор
+    int 21h
+    popa   
     ret    
 endp
 end start

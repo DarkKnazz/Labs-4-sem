@@ -10,10 +10,10 @@ import org.scalatest.junit.JUnitRunner
 import org.scalatest.FunSuite
 
 import main.scala.Demo
-@RunWith(classOf[JUnitRunner])
-class MatchTest extends FunSuite {
+//@RunWith(classOf[JUnitRunner])
+object MatchTest extends App {
 
-  //Testing usual recursion
+  /*//Testing usual recursion
   test("notTailRec should return '2, 3, 4, 5, 6' if '1, 7' is provided") {
     val s = Demo.notTailRec(1, 7)
     assert(s.equals(List(2, 3, 4, 5, 6)))
@@ -64,4 +64,13 @@ class MatchTest extends FunSuite {
     val s = Demo.tailRecNumbers(7, -6, List())
     assert(s.equals(List()))
   }
+
+  test("tailRecNumbers should return empty List if 1234 is provided") {
+    val s = Demo.reverseFun(14567)
+    assert(s.equals(76541
+    ))
+  }*/
+
+  var s1 = Demo.createTree(6, 6, 0)
+  println(s1);
 }
